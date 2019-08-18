@@ -34,15 +34,46 @@ router.post('/add', auth, async ( req, res) => {
 });
 
 // get user with specific email
-router.get('/get:email', auth, async (req, res) => {
+router.get('/get/:email', auth, async (req, res) => {
     try {
-        const user = User.find({email:req.params.email});
+        const user = await User.find({email:req.params.email});
         if(!user) res.status(200).send({data:`No such user with email ${req.params.email}`});
         res.status(200).send(user);
     } catch (error) {
         res.status(400).send({error:error.data})
     }
     
+});
+
+// edit a specific record
+router.patch('/update/:user_id', auth , async ( req, res ) => {
+    try {
+        if(!req.params.user_id) throw new Error("Please provide user_id");
+        const user = await User.findOne({_id:user_id});
+        let newUser = {
+            firstName:req.body.firstName?req.body.firstName:user.firstName,
+            lastName:req.body.lastName?req.body.lastName:user.lastName,
+            email:req.body.email?req.body.email:user.email,
+            age:req.body.age?req.body.age:user.age,
+            hobby:req.body.hobby?req.body.hobby.split(','):user.hobby,
+            createdBy:req.admin._id
+        }
+        let result = await User.updateOne({_id:id},newUser);
+        res.status(200).send(result);
+    } catch (error) {
+        res.status(400).send({error:error.data}); 
+    }
+});
+
+// delete an entry
+router.delete('/delete/:user_id', auth , async (req, res) => {
+    try {
+        if(!req.params.user_id) throw new Error("Please provide user_id");
+        let result = await User.deleteOne({_id:req.params.user_id});
+        res.status(200).send({data:result});
+    } catch (error) {
+        res.status(400).send({error:error.data}); 
+    }
 });
 
 
