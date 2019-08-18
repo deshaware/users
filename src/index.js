@@ -13,8 +13,11 @@ app.use(bodyParser.urlencoded({
 app.get('/',(req,res)=>res.send(`Server is up and running`));
 
 //routes
-const user = require('./routes/api/admin');
-app.use('/api/admin',user);
+const user = require('./routes/api/user');
+const admin = require('./routes/api/admin');
+app.use('/api/admin',admin);
+app.use('/api/users',user);
+
 
 
 const port = process.env.PORT || 5000;

@@ -8,12 +8,12 @@ const auth = async (req, res, next) => {
         const token = req.header("Authorization");
         if(!token) throw new Error("Admin not authenticated")
         const decode = jwt.verify(token,secret);
-        const Admin = await Admin.findOne({_id: decode._id, 'tokens.token':token })
-        if(!Admin){
+        const admin = await Admin.findOne({_id: decode._id, 'tokens.token':token })
+        if(!admin){
             throw new Error("Unauthorized")
         }
         req.token = token
-        req.Admin = Admin
+        req.admin = admin
         next()
     } catch (error) {
         res.status(401).send({error:error.message})

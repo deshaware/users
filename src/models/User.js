@@ -26,14 +26,14 @@ const userSchema = new mongoose.Schema({
     },
     age:{
         type:Number,
-        validate(value){
-            if(!validator.isFloat(value) || !validator.isAlphanumeric(value)){
-                throw new Error("Invalid Age")
-            }
-            if(value < 0 && value > 100){
-                throw new Error("Invalid Age")
-            }
-        }
+        // validate(value){
+        //     if(validator.isFloat(value) || validator.isAlphanumeric(value)){
+        //         throw new Error("Invalid Age")
+        //     } 
+        //     if(value < 0 && value > 100){
+        //         throw new Error("Invalid Age")
+        //     }
+        // }
     },
     profession:{
         type:String,
@@ -41,12 +41,14 @@ const userSchema = new mongoose.Schema({
         trim:true
     },
     hobby:{
-        type:String,
+        type:[String],
         lowercase:true,
         trim:true
     },
-
-
+    createdBy:{
+        type:mongoose.Types.ObjectId,
+        ref:'Admin'
+    }
 },{timestamps:true});
 
 // Whenever returning json doc
