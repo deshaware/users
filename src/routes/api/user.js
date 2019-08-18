@@ -33,4 +33,17 @@ router.post('/add', auth, async ( req, res) => {
     }
 });
 
+// get user with specific email
+router.get('/get:email', auth, async (req, res) => {
+    try {
+        const user = User.find({email:req.params.email});
+        if(!user) res.status(200).send({data:`No such user with email ${req.params.email}`});
+        res.status(200).send(user);
+    } catch (error) {
+        res.status(400).send({error:error.data})
+    }
+    
+});
+
+
 module.exports = router;
